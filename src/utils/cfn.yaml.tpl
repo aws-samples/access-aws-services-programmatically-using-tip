@@ -63,6 +63,14 @@ Resources:
                   - "athena:ListDatabases"
                   - "athena:ListWorkGroups"
                 Resource: '*'
+        - PolicyName: redshift-data
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "redshift-data:*"
+                Resource: '*'
         - PolicyName: s3ag
           PolicyDocument:
             Version: "2012-10-17"
