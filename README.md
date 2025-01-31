@@ -1,6 +1,6 @@
 # Access AWS services programmatically using trusted identity propagation
 
-This sample Python application demonstrates how you can access AWS services, such as Amazon S3, Amazon Athena and Amazon Redshift DataAPI, using trusted identity propagation, an AWS IAM Identity Center feature that allows authorized access to AWS resources based on the user's identity context and securely shares the user's identity context with other AWS services.
+This sample Python application demonstrates how you can access AWS services, such as Amazon S3 and Amazon Athena, using trusted identity propagation, an AWS IAM Identity Center feature that allows authorized access to AWS resources based on the user's identity context and securely shares the user's identity context with other AWS services.
 
 The application also provides a [diagnostic tool](#trusted-token-issuer-diagnostic-utility) to help you verify your current setup.
 
@@ -13,7 +13,7 @@ List of prerequisites needed to use this tool:
 - Python 3.x
 - AWS CLI
 - An OAuth 2.0-based external identity provider configured as [trusted token issuer](https://docs.aws.amazon.com/singlesignon/latest/userguide/using-apps-with-trusted-token-issuer.html) with AWS IAM Identity Center. This sample code provides support for Okta, Entra ID, and Amazon Cognito but you can [implement additional providers](#implementing-additional-oauth-20-identity-providers).
-- A [customer managed application](https://docs.aws.amazon.com/singlesignon/latest/userguide/trustedidentitypropagation-using-customermanagedapps-setup.html) configured to be used with [Amazon S3 Access Grants](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-grants.html), [Amazon Athena](https://docs.aws.amazon.com/athena/latest/ug/workgroups-identity-center.html), and/or [Amazon Redshift](https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-idp-connect-console.html) or any other AWS service that supports Trusted Identity Propagation (see [Trusted identity propagation use cases](https://docs.aws.amazon.com/singlesignon/latest/userguide/trustedidentitypropagation-integrations.html) in the AWS documentation).
+- A [customer managed application](https://docs.aws.amazon.com/singlesignon/latest/userguide/trustedidentitypropagation-using-customermanagedapps-setup.html) configured to be used with [Amazon S3 Access Grants](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-grants.html) and/or [Amazon Athena](https://docs.aws.amazon.com/athena/latest/ug/workgroups-identity-center.html), or any other AWS service that supports Trusted Identity Propagation (see [Trusted identity propagation use cases](https://docs.aws.amazon.com/singlesignon/latest/userguide/trustedidentitypropagation-integrations.html) in the AWS documentation).
 
 Refer to the blog post [Access AWS services programmatically using trusted identity propagation](https://aws.amazon.com/blogs/security/access-aws-services-programmatically-using-trusted-identity-propagation/) to learn how to create a customer managed application.
 
@@ -115,18 +115,6 @@ aws athena get-query-results \
     --query-execution-id $QUERY_EXECUTION_ID \
     --profile my-tti-profile \
     --output text
-```
-
-you can also query Amazon Redshift tables with DataAPI as follows:
-
-```bash
-STATEMENT_ID=$(aws redshift-data execute-statement \
-    --sql "SELECT * FROM sys_query_history" \
-    --workgroup-name my-workgroup \
-    --database dev \
-    --idc \
-    --profile my-tti-profile | jq -r ".Id")
-aws redshift-data get-statement-result --id $STATEMENT_ID --idc --profile my-tti-profile
 ```
 
 If your IAM Identity Center user has also Amazon Q business applications, you can access the Amazon Q business API. For example, to retrieve all conversations of the user for an Amazon Q business application with the ID `a1b2c3d4-5678-90ab-cdef-EXAMPLE11111`, use:
